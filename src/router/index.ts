@@ -28,8 +28,7 @@ import { useAuthStore } from '../stores/auth'
     routes
   })
 
-  router.beforeEach((to, from, next) => {
-    console.log('Navigating to:', from)
+  router.beforeEach((to, _, next) => {
     const authStore = useAuthStore()
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
       next('/login')
