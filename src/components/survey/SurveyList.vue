@@ -15,7 +15,7 @@
         <tr v-for="survey in filteredSurveys" :key="survey.id">
           <td class="px-6 py-4 whitespace-nowrap">{{ survey.title }}</td>
           <td class="px-6 py-4 whitespace-nowrap">{{ survey.status }}</td>
-          <td v-if="isAdmin" class="px-6 py-4 whitespace-nowrap">{{ survey.response_count || 0 }}</td>
+          <td v-if="isUser" class="px-6 py-4 whitespace-nowrap">{{ survey.response_count || 0 }}</td>
           <td class="px-6 py-4 whitespace-nowrap flex gap-2">
             <router-link
               v-if="!hasResponded[survey.id]"
@@ -77,7 +77,8 @@ let newStatus: string | null = null
 let actionType: 'status' | 'delete' | null = null
 const hasResponded = ref<{ [key: string]: boolean }>({})
 
-const isAdmin = computed(() => authStore.user?.role === 'admin')
+const isAdmin = computed(() => authStore.user?.role === 'Admin' || authStore.user?.role === 'SuperAdmin' || authStore.user?.role === 'admin')
+const isUser = computed(() => authStore.user?.role === 'user' || authStore.user?.role === 'User')
 const filteredSurveys = computed(() => {
   if (isAdmin.value) {
     return surveys.value

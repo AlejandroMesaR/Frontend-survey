@@ -37,7 +37,7 @@
     <!-- Opciones para Selección Única o Múltiple -->
     <div v-if="localQuestion.type === 'single' || localQuestion.type === 'multiple'" class="mb-2">
       <label class="block text-sm font-medium text-gray-700">Opciones</label>
-      <div v-for="(opt, optIndex) in localQuestion.options ?? []" :key="optIndex" class="flex items-center mb-2">
+      <div v-for="optIndex in (localQuestion.options ?? []).length" :key="optIndex" class="flex items-center mb-2">
         <input
           v-model="(localQuestion.options ?? [])[optIndex]"
           type="text"

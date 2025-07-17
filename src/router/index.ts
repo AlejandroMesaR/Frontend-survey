@@ -14,7 +14,7 @@ import { useAuthStore } from '../stores/auth'
   const routes: RouteRecordRaw[] = [
     { path: '/', component: DashboardView, meta: { requiresAuth: true } },
     { path: '/login', component: LoginView },
-    { path: '/surveys', component: SurveyView, meta: { requiresAuth: true, requiresAdmin: true } },
+    { path: '/surveys', component: SurveyView, meta: { requiresAuth: true } },
     { path: '/surveys/create', component: SurveyCreateView, meta: { requiresAuth: true, requiresAdmin: true } },
     { path: '/templates', component: TemplateView, meta: { requiresAuth: true, requiresAdmin: true } },
     { path: '/responses/:surveyId', component: ResponseView, meta: { requiresAuth: false } },
@@ -29,6 +29,7 @@ import { useAuthStore } from '../stores/auth'
   })
 
   router.beforeEach((to, from, next) => {
+    console.log('Navigating to:', from)
     const authStore = useAuthStore()
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
       next('/login')
