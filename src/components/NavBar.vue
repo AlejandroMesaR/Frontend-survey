@@ -4,10 +4,8 @@
         <div class="text-lg font-bold">Plataforma de Encuestas</div>
         <div class="hidden md:flex space-x-4">
           <router-link to="/" class="hover:text-gray-300">Dashboard</router-link>
-          <router-link v-if="isAdmin" to="/surveys" class="hover:text-gray-300">Encuestas</router-link>
-          <router-link v-if="isAdmin" to="/templates" class="hover:text-gray-300">Templates</router-link>
+          <router-link to="/surveys" class="hover:text-gray-300">Encuestas</router-link>
           <router-link to="/responses" class="hover:text-gray-300">Respuestas</router-link>
-          <router-link to="/analytics" class="hover:text-gray-300">Análisis</router-link>
         </div>
         <button class="md:hidden" @click="toggleMenu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,7 +16,7 @@
       <div v-if="menuOpen" class="md:hidden mt-2 space-y-2">
         <router-link to="/" class="block hover:text-gray-300">Dashboard</router-link>
         <router-link v-if="isAdmin" to="/surveys" class="block hover:text-gray-300">Encuestas</router-link>
-        <router-link v-if="isAdmin" to="/templates" class="block hover:text-gray-300">Templates</router-link>
+        <router-link v-if="isAdmin" to="/templates" class="block hover:text-gray-300">Plantilas</router-link>
         <router-link to="/responses" class="block hover:text-gray-300">Respuestas</router-link>
         <router-link to="/analytics" class="block hover:text-gray-300">Análisis</router-link>
       </div>

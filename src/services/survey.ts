@@ -3,11 +3,9 @@ import type { Survey, SurveyShow } from '../models/survey'
 import { decodeToken } from './utils'
 
 export const createSurvey = async (survey: Survey): Promise<Survey> => {
-
   const correctSurvey = await correctFormat(survey)
-
   console.log('Creating survey:', correctSurvey)
-  const response = await api.post('/surveys', survey)
+  const response = await api.post('/surveys', correctSurvey)
   return response.data
 }
 
@@ -42,6 +40,7 @@ export const getUserIdFromToken = async (): Promise<string | undefined> => {
   return decoded?.sub
 }
 
+
 export const fetchSurvey = async (id: string): Promise<Survey> => {
   const response = await api.get(`/surveys/${id}`)
   return response.data
@@ -68,6 +67,11 @@ export async function updateSurveyStatus(id: string, statusUpdate: { status: str
 
 export const fetchSurveys = async (): Promise<SurveyShow[]> => {
   const response = await api.get('/surveys')
+  return response.data
+}
+
+export const fetchSurveysAdmin = async (): Promise<SurveyShow[]> => {
+  const response = await api.get('/surveys/admin')
   return response.data
 }
 

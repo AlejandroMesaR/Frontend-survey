@@ -6,6 +6,7 @@
       <thead class="bg-gray-50">
         <tr>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-96">Descripción</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
           <th v-if="isAdmin" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Respuestas</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
@@ -14,31 +15,44 @@
       <tbody class="bg-white divide-y divide-gray-200">
         <tr v-for="survey in filteredSurveys" :key="survey.id">
           <td class="px-6 py-4 whitespace-nowrap">{{ survey.title }}</td>
-          <td class="px-6 py-4 whitespace-nowrap">{{ survey.status }}</td>
-          <td v-if="isUser" class="px-6 py-4 whitespace-nowrap">{{ survey.response_count || 0 }}</td>
-          <td class="px-6 py-4 whitespace-nowrap flex gap-2">
-            <router-link
-              v-if="!hasResponded[survey.id]"
-              :to="`/surveys/${survey.id}/respond`"
-              class="text-blue-500 hover:text-blue-700"
-              :class="{ 'opacity-50 cursor-not-allowed': hasResponded[survey.id] }"
+          <td class="px-6 py-4 whitespace-nowrap w-96 truncate" style="max-width: 16rem;">{{ survey.description }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <select v-if="isAdmin"
+              v-model="selectedStatus[survey.id]"
+              @change="openConfirmDialog('status', survey.id, $event)"
+              class="px-2 py-1 border rounded text-sm"
             >
-              Responder
-            </router-link>
-            <span v-else class="text-gray-500">Ya has respondido</span>
-            <template v-if="isAdmin">
-              <router-link :to="`/surveys/${survey.id}/preview`" class="text-blue-500 hover:text-blue-700">Previsualizar</router-link>
-              <button @click="openConfirmDialog('delete', survey.id)" class="text-red-500 hover:text-red-700">Eliminar</button>
-              <router-link :to="`/analytics/${survey.id}`" class="text-green-500 hover:text-green-700">Ver Análisis</router-link>
-              <select
-                v-model="selectedStatus[survey.id]"
-                @change="openConfirmDialog('status', survey.id, $event)"
-                class="px-2 py-1 border rounded text-sm"
+              <option value="draft">Borrador</option>
+              <option value="published">Publicada</option>
+              <option value="closed">Cerrada</option>
+            </select>
+            <span v-else>
+              {{ survey.status === 'draft' ? 'Borrador' : survey.status === 'published' ? 'Publicada' : 'Cerrada' }}
+            </span>
+          </td>
+          <td v-if="isAdmin" class="px-6 py-4 whitespace-nowrap">{{ survey.response_count || 0 }}</td>
+          <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+            <div v-if="isUser">
+              <router-link
+                v-if="!hasResponded[survey.id]"
+                :to="`/surveys/${survey.id}/respond`"
+                class="text-blue-500 hover:text-blue-700"
+                :class="{ 'opacity-50 cursor-not-allowed': hasResponded[survey.id] }"
               >
-                <option value="draft">Borrador</option>
-                <option value="published">Publicada</option>
-                <option value="closed">Cerrada</option>
-              </select>
+                Responder
+              </router-link>
+              <span v-else class="text-gray-500">Ya has respondido</span>
+            </div>
+            <template v-if="isAdmin">
+              <router-link :to="`/surveys/${survey.id}/preview`" class="text-blue-500 hover:text-blue-700">
+                Previsualizar
+              </router-link>
+              <button @click="openConfirmDialog('delete', survey.id)" class="text-red-500 hover:text-red-700">
+                Eliminar
+              </button>
+              <router-link v-if="isAdmin" :to="`/surveys/${survey.id}/analysis`" class="text-green-500 hover:text-green-700">
+                Ver Análisis
+              </router-link>   
             </template>
           </td>
         </tr>
@@ -88,11 +102,17 @@ const filteredSurveys = computed(() => {
 
 onMounted(async () => {
   try {
-    surveys.value = await surveyStore.fetchSurveys()
+    if (isAdmin.value) {
+      console.log('Cargando encuestas para administrador...')
+      surveys.value = await surveyStore.fetchSurveysAdmin()
+    } else {
+      console.log('Cargando encuestas para usuario...')
+      surveys.value = await surveyStore.fetchSurveys()
+    }
     surveys.value.forEach((survey) => {
       selectedStatus.value[survey.id] = survey.status
     })
-    if (!isAdmin.value && authStore.user?.id) {
+    if (!isAdmin.value) {
       for (const survey of surveys.value) {
         hasResponded.value[survey.id] = await responseStore.hasUserResponded(survey.id)
       }
@@ -137,7 +157,13 @@ const confirmAction = async () => {
       await surveyStore.deleteSurvey(currentSurveyId)
       alert('Encuesta eliminada con éxito')
     }
-    surveys.value = await surveyStore.fetchSurveys()
+    if (isAdmin.value) {
+      console.log('Recargando encuestas para administrador...')
+      surveys.value = await surveyStore.fetchSurveysAdmin()
+    } else {
+      console.log('Recargando encuestas para usuario...')
+      surveys.value = await surveyStore.fetchSurveys()
+    }
   } catch (error) {
     console.error(`Error al ${actionType === 'status' ? 'actualizar el estado' : 'eliminar la encuesta'}:`, error)
     alert(`Error al ${actionType === 'status' ? 'actualizar el estado' : 'eliminar la encuesta'}`)

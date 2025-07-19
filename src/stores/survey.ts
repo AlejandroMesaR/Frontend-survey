@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { createSurvey, fetchSurvey, updateSurvey, fetchSurveys, deleteSurvey, updateSurveyStatus} from '../services/survey'
+import { createSurvey, fetchSurvey, updateSurvey, fetchSurveys, fetchSurveysAdmin, deleteSurvey, updateSurveyStatus} from '../services/survey'
 import type { Survey, SurveyShow } from '../models/survey'
 
 export const useSurveyStore = defineStore('survey', {
@@ -37,6 +37,15 @@ export const useSurveyStore = defineStore('survey', {
     async fetchSurveys(): Promise<SurveyShow[]> {
       try {
         const surveys = await fetchSurveys()
+        return surveys
+      } catch (error) {
+        console.error('Error obteniendo encuestas:', error)
+        throw error
+      }
+    },
+    async fetchSurveysAdmin(): Promise<SurveyShow[]> {
+      try {
+        const surveys = await fetchSurveysAdmin()
         return surveys
       } catch (error) {
         console.error('Error obteniendo encuestas:', error)

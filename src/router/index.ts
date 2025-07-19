@@ -9,6 +9,7 @@ import AnalysisView from '../views/AnalysisView.vue'
 import LoginView from '../views/LoginView.vue'
 import SurveyPreview from '../components/survey/SurveyPreview.vue'
 import SurveyResponse from '../components/response/SurveyResponse.vue'
+import SurveyAnalysis from '../components/analysis/SurveyAnalysis.vue'
 import { useAuthStore } from '../stores/auth'
 
   const routes: RouteRecordRaw[] = [
@@ -20,7 +21,8 @@ import { useAuthStore } from '../stores/auth'
     { path: '/responses/:surveyId', component: ResponseView, meta: { requiresAuth: false } },
     { path: '/analytics/:surveyId', component: AnalysisView, meta: { requiresAuth: true, requiresAdmin: true } },
     { path: '/surveys/:id/preview', component: SurveyPreview, meta: { requiresAuth: true, requiresAdmin: true } },
-    { path: '/surveys/:id/respond', name: 'SurveyResponse', component: SurveyResponse, meta: { requiresAuth: true }}
+    { path: '/surveys/:id/respond', name: 'SurveyResponse', component: SurveyResponse, meta: { requiresAuth: true }},
+    { path: '/surveys/:id/analysis', name: 'SurveyAnalysis', component: SurveyAnalysis, meta: { requiresAuth: true }}
   ]
 
   const router = createRouter({

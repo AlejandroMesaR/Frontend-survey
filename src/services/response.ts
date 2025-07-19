@@ -17,7 +17,7 @@ export async function uploadFile(file: File): Promise<string> {
   try {
     const formData = new FormData()
     formData.append('file', file)
-    const response = await api.post('/api/upload-file', formData, {
+    const response = await api.post('/responses/upload-file', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
     console.log('File uploaded:', response.data)
@@ -30,7 +30,8 @@ export async function uploadFile(file: File): Promise<string> {
 
 export async function checkUserResponse(surveyId: string): Promise<boolean> {
   try {
-    const response = await api.get(`/api/surveys/${surveyId}/has-responded`)
+    const response = await api.get(`/responses/surveys/${surveyId}/has-responded`)
+    console.log('id encuetsad',surveyId,'User response check:', response.data.has_responded)
     return response.data.has_responded
   } catch (error) {
     console.error('Error checking user response:', error)

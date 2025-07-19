@@ -26,15 +26,15 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(id: string, password: string) {
       const data = await login(id, password)
-      console.log('Login data:', data)
       const decoded: DecodeToken | null = await decodeToken(data.access_token)
       if (decoded) {
 
         this.user = { id: decoded.sub, role: decoded.role }
         this.token = data.access_token
         this.exp = decoded.exp
-        localStorage.setItem('token', this.token)
+        localStorage.setItem('token', data.access_token)
       }
+      console.log('Token:', localStorage.getItem('token'))
     },
     logout() {
       this.user = null
