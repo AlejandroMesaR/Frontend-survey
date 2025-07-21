@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { login } from '../services/auth'
-import type { DecodeToken } from '../models/token'
+import { login, register } from '../services/auth'
+import type { DecodeToken, RegisterRequest } from '../models/token'
 import { decodeToken } from '../services/utils'
 
 interface User {
@@ -24,6 +24,10 @@ export const useAuthStore = defineStore('auth', {
     isAuthenticated: (state): boolean => !!state.token
   },
   actions: {
+    async register(userData: RegisterRequest) {
+      const response = await register(userData)
+      return response
+    },
     async login(id: string, password: string) {
       const data = await login(id, password)
       const decoded: DecodeToken | null = await decodeToken(data.access_token)

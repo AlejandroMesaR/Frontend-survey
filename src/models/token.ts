@@ -5,6 +5,18 @@ export interface LoginResponse {
   role: string
 }
 
+export interface RegisterRequest {
+  name: string
+  email: string
+  password: string
+  role?: string
+}
+
+export interface RegisterResponse {
+  message: string
+  user_id: string
+}
+
 export interface DecodeToken {
   sub: string
   role: string

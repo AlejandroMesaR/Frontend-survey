@@ -7,6 +7,7 @@ import TemplateView from '../views/TemplateView.vue'
 import ResponseView from '../views/ResponseView.vue'
 import AnalysisView from '../views/AnalysisView.vue'
 import LoginView from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
 import SurveyPreview from '../components/survey/SurveyPreview.vue'
 import SurveyResponse from '../components/response/SurveyResponse.vue'
 import SurveyAnalysis from '../components/analysis/SurveyAnalysis.vue'
@@ -15,6 +16,7 @@ import { useAuthStore } from '../stores/auth'
   const routes: RouteRecordRaw[] = [
     { path: '/', component: DashboardView, meta: { requiresAuth: true } },
     { path: '/login', component: LoginView },
+    { path: '/register', component: RegisterView },
     { path: '/surveys', component: SurveyView, meta: { requiresAuth: true } },
     { path: '/surveys/create', component: SurveyCreateView, meta: { requiresAuth: true, requiresAdmin: true } },
     { path: '/templates', component: TemplateView, meta: { requiresAuth: true, requiresAdmin: true } },

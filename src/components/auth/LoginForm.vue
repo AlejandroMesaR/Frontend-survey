@@ -12,6 +12,15 @@
       </div>
       <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Iniciar Sesión</button>
     </form>
+    
+    <div class="mt-4 text-center">
+      <p class="text-sm text-gray-600">
+        ¿No tienes una cuenta? 
+        <router-link to="/register" class="text-blue-600 hover:text-blue-700 font-medium">
+          Registrarse
+        </router-link>
+      </p>
+    </div>
   </div>
 </template>
 
