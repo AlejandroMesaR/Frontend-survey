@@ -1,8 +1,10 @@
 import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 
+const API_BASE_URL = import.meta.env.API_BASE_URL || '/api';
+
 const api: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
   },
