@@ -5,7 +5,7 @@ let API_BASE_URL = null
 if (!import.meta.env.VITE_API_URL) {
   API_BASE_URL = '/api'
 } else {
-  API_BASE_URL = import.meta.env.VITE_API_URL+'/api';
+  API_BASE_URL = import.meta.env.VITE_API_URL;
 }
 
 
